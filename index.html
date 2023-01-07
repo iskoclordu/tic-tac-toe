@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic-Tac-Toe</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="header-container">
+    <div class="header">
+      <p class="header-text">Tic-Tac-Toe</p>
+    </div>
+  </div>
+  <div class="winner">
+    <div class="winner-background"></div>
+    <span>player1 wins!</span></div>
+  <div class="game-board-container">
+    <div class="squares" id="square1"><span>X</span></div>
+    <div class="squares" id="square2"><span>X</span></div>
+    <div class="squares" id="square3"><span>X</span></div>
+    <div class="squares" id="square4"><span>O</span></div>
+    <div class="squares" id="square5"><span>O</span></div>
+    <div class="squares" id="square6"><span>X</span></div>
+    <div class="squares" id="square7"><span>O</span></div>
+    <div class="squares" id="square8"><span>X</span></div>
+    <div class="squares" id="square9"><span>O</span></div>
+  </div>
+
+  <div class="game-info-container">
+    <div class="scene-choose-play">
+      <button class="PvP">Player Vs Player</button>
+      <button class="PvC">Player vs Computer</button>
+    </div>
+    <div class="scene-select-name">
+      <form action="" method="get" class="player-info">
+        <div class="player-inputs">
+          <div class="player1-form">
+            <div class="form-row">
+                <label for="palyer1-name">Player-1 Name</label>
+                <input type="text" id="player1-name" name="player1-name">
+            </div>
+            <fieldset class="legacy-form-row">
+              <legend>Choose Marker</legend>
+              <input type="radio" id="marker-X" name="player1-marker" value="X" checked>
+              <label for="marker-X" class="radio-label">X</label>
+              <input type="radio" id="marker-O" name="player1-marker" value="O">
+              <label for="marker-O" class="radio-label">O</label>
+            </fieldset>
+          </div>
+          <div class="player2-form">
+            <div class="form-row">
+                <label for="palyer2-name">Player2-Name</label>
+                <input type="text" id="player2-name" name="player2-name">
+            </div>
+            <fieldset class="legacy-form-row">
+              <legend>Choose Marker</legend>
+              <input type="radio" id="marker-X" name="player2-marker" value="X">
+              <label for="marker-X" class="radio-label">X</label>
+              <input type="radio" id="marker-O" name="player2-marker" value="O" checked>
+              <label for="marker-O" class="radio-label">O</label>
+            </fieldset>
+          </div>
+        </div>
+
+        <button class="start-game">Start Game</button>
+        
+      </form>
+    </div>
+    <div class="scene-during-game">
+      <div class="header-info">SCORE</div>
+      <div class="players-info">
+        <div class="player1-info-container">
+          <div class="player1-name-container"><span>Will</span></div>
+          <div class="player1-score-container"><span>5</span></div>
+        </div>
+        <div class="player2-info-container">
+          <div class="player2-name-container"><span>Smith</span></div>
+          <div class="player2-score-container"><span>3</span></div>
+        </div>
+      </div>
+
+      <button class="restart-game">Restart Game</button>
+    </div>
+    <div class="scene-end-round">
+      <div class="header-info">SCORE</div>
+      <div class="players-info">
+        <div class="player1-info-container">
+          <div class="player1-name-container"><span>Will</span></div>
+          <div class="player1-score-container"><span>5</span></div>
+        </div>
+        <div class="player2-info-container">
+          <div class="player2-name-container"><span>Smith</span></div>
+          <div class="player2-score-container"><span>3</span></div>
+        </div>
+      </div>
+
+      <button class="new-round">New Round</button>
+      <button class="restart-game">Restart Game</button>
+      <button class="change-players">Change Players</button>
+    </div>
+
+    
+  </div>
+  
+
+</body>
+</html>
