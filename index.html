@@ -14,19 +14,17 @@
       <p class="header-text">Tic-Tac-Toe</p>
     </div>
   </div>
-  <div class="winner">
-    <div class="winner-background"></div>
-    <span>player1 wins!</span></div>
+  <div class="winner"></div>
   <div class="game-board-container">
-    <div class="squares" id="square1"><span>X</span></div>
-    <div class="squares" id="square2"><span>X</span></div>
-    <div class="squares" id="square3"><span>X</span></div>
-    <div class="squares" id="square4"><span>O</span></div>
-    <div class="squares" id="square5"><span>O</span></div>
-    <div class="squares" id="square6"><span>X</span></div>
-    <div class="squares" id="square7"><span>O</span></div>
-    <div class="squares" id="square8"><span>X</span></div>
-    <div class="squares" id="square9"><span>O</span></div>
+    <div class="squares" id="1"></div>
+    <div class="squares" id="2"></div>
+    <div class="squares" id="3"></div>
+    <div class="squares" id="4"></div>
+    <div class="squares" id="5"></div>
+    <div class="squares" id="6"></div>
+    <div class="squares" id="7"></div>
+    <div class="squares" id="8"></div>
+    <div class="squares" id="9"></div>
   </div>
 
   <div class="game-info-container">
@@ -40,32 +38,32 @@
           <div class="player1-form">
             <div class="form-row">
                 <label for="palyer1-name">Player-1 Name</label>
-                <input type="text" id="player1-name" name="player1-name">
+                <input type="text" id="player1-name" name="player1Name" value="player-1">
             </div>
             <fieldset class="legacy-form-row">
               <legend>Choose Marker</legend>
-              <input type="radio" id="marker-X" name="player1-marker" value="X" checked>
+              <input type="radio" id="marker-X" name="player1Marker" value="X" checked>
               <label for="marker-X" class="radio-label">X</label>
-              <input type="radio" id="marker-O" name="player1-marker" value="O">
+              <input type="radio" id="marker-O" name="player1Marker" value="O">
               <label for="marker-O" class="radio-label">O</label>
             </fieldset>
           </div>
           <div class="player2-form">
             <div class="form-row">
                 <label for="palyer2-name">Player2-Name</label>
-                <input type="text" id="player2-name" name="player2-name">
+                <input type="text" id="player2-name" name="player2Name" value="player-2">
             </div>
             <fieldset class="legacy-form-row">
               <legend>Choose Marker</legend>
-              <input type="radio" id="marker-X" name="player2-marker" value="X">
+              <input type="radio" id="marker-X" name="player2Marker" value="X">
               <label for="marker-X" class="radio-label">X</label>
-              <input type="radio" id="marker-O" name="player2-marker" value="O" checked>
+              <input type="radio" id="marker-O" name="player2Marker" value="O" checked>
               <label for="marker-O" class="radio-label">O</label>
             </fieldset>
           </div>
         </div>
 
-        <button class="start-game">Start Game</button>
+        <button type="button" class="start-game" >Start Game</button>
         
       </form>
     </div>
