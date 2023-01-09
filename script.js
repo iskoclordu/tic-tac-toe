@@ -175,11 +175,11 @@ const player = (() => {
   const showNames = () => {
     const player1NameShow = document.querySelector('.player1-name-container');
     player1NameShow.innerHTML = '';
-    player1NameShow.innerHTML = `<span>${player1.name}</span>`;
+    player1NameShow.innerHTML = `<span>${player1.name} - ${player1.marker}</span>`;
 
     const player2NameShow = document.querySelector('.player2-name-container');
     player2NameShow.innerHTML = '';
-    player2NameShow.innerHTML = `<span>${player2.name}</span>`;
+    player2NameShow.innerHTML = `<span>${player2.name} - ${player2.marker}</span>`;
 
     const player1NameShowEndRound = document.querySelector('.scene-end-round .player1-name-container');
     player1NameShowEndRound.innerHTML = '';
