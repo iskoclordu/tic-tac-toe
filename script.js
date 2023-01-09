@@ -37,6 +37,7 @@ const manipulateDom = (() => {
           e.target.innerHTML = `${gamePlay.getCurrentMove()}`;
           gamePlay.cacheMoves(indexNumber);
           gamePlay.checkWin();
+          plAIr.comPlaysHard();
         }
       });
     }
@@ -56,6 +57,9 @@ const manipulateDom = (() => {
     changePlayers.addEventListener('click', gamePlay.newGame);
   };
 
+  let gameMode = '';
+  const getGameMode = () => gameMode;
+
   const callFirstScene = () => {
     toggleDisplayOff('.winner');
     toggleDisplayOff('.scene-end-round');
@@ -73,6 +77,7 @@ const manipulateDom = (() => {
     toggleDisplayOn('.scene-select-name');
     toggleDisplayOn('.player2-form');
     activateSecondSceneButtons();
+    gameMode = 'PvP';
   };
 
   const callSecondScenePvC = () => {
@@ -83,6 +88,7 @@ const manipulateDom = (() => {
     toggleDisplayOff('.player2-form');
     toggleDisplayOn('.scene-select-name');
     activateSecondSceneButtons();
+    gameMode = 'PvC';
   };
 
   const callThirdScene = () => {
@@ -121,6 +127,7 @@ const manipulateDom = (() => {
     turnGameBoardSceneOn,
     turnGameBoardSceneOff,
     activateFirstSceneButtons,
+    getGameMode,
   };
 })();
 
@@ -139,9 +146,13 @@ const player = (() => {
     player2Marker = document.querySelector('input[name="player2Marker"]:checked').value;
 
     if (player1Marker === player2Marker) {
+      if (manipulateDom.getGameMode() === 'PvP') {
       // eslint-disable-next-line no-alert
-      alert('Players Must Choose Different Markers');
-      validation = false;
+        alert('Players Must Choose Different Markers');
+        validation = false;
+      } else {
+        validation = true;
+      }
     } else {
       validation = true;
     }
@@ -157,8 +168,14 @@ const player = (() => {
     if (validation) {
       player1.name = document.querySelector('#player1-name').value;
       player1.marker = player1Marker;
-      player2.name = document.querySelector('#player2-name').value;
-      player2.marker = player2Marker;
+      if (manipulateDom.getGameMode() === 'PvP') {
+        player2.name = document.querySelector('#player2-name').value;
+        player2.marker = player2Marker;
+      } else if (manipulateDom.getGameMode() === 'PvC') {
+        player2.name = 'plAIr';
+        player2.marker = plAIr.computerMarker();
+      }
+
       manipulateDom.turnGameBoardSceneOn();
       manipulateDom.callThirdScene();
       showNames();
@@ -203,7 +220,6 @@ const player = (() => {
     getMarkerPlayer1,
     getMarkerPlayer2,
     changeMarker,
-
   };
 })();
 
@@ -231,6 +247,10 @@ const gamePlay = (() => {
 
     emptyRoundCache();
     manipulateDom.callThirdScene();
+
+    if (manipulateDom.getGameMode() === 'PvC') {
+      plAIr.comPlaysHard();
+    }
   };
 
   const startRoundWithDifferentMarker = () => {
@@ -247,13 +267,22 @@ const gamePlay = (() => {
   };
 
   const getCurrentMove = () => {
-    defineCurrentMove();
-    lastMove = currentMove;
-    return currentMove;
+    if (manipulateDom.getGameMode() === 'PvP') {
+      defineCurrentMove();
+      lastMove = currentMove;
+      return currentMove;
+    } if (manipulateDom.getGameMode() === 'PvC') {
+      currentMove = player.getMarkerPlayer1();
+      lastMove = currentMove;
+      return currentMove;
+    }
+    return 'error';
   };
 
   const movesX = [];
+  const getMovesX = () => movesX;
   const movesO = [];
+  const getMovesO = () => movesO;
 
   const cacheMoves = (indexNumber) => {
     if (currentMove === 'X') {
@@ -267,11 +296,13 @@ const gamePlay = (() => {
   let scorePlayer1 = 0;
   let scorePlayer2 = 0;
 
-  const checkWin = () => {
+  const getWinningPattern = () => winningPattern;
+
+  const checkWin = (x = currentMove) => {
     let moves = [];
-    if (currentMove === 'X') {
+    if (x === 'X') {
       moves = movesX;
-    } else if (currentMove === 'O') {
+    } else if (x === 'O') {
       moves = movesO;
     }
 
@@ -305,7 +336,7 @@ const gamePlay = (() => {
     }
 
     if (moves.length >= 3 && winningPattern !== null) {
-      if (player.getMarkerPlayer1() === currentMove) {
+      if (player.getMarkerPlayer1() === x) {
         const winnerMessage = `${player.getNamePlayer1()} wins!`;
         const winnerMessageShow = document.querySelector('.winner');
         winnerMessageShow.innerHTML = winnerMessage;
@@ -437,11 +468,211 @@ const gamePlay = (() => {
   return {
     getCurrentMove,
     cacheMoves,
+    getMovesX,
+    getMovesO,
     startRound,
     checkWin,
+    getWinningPattern,
     restartGame,
     showScore,
     newGame,
     startRoundWithDifferentMarker,
+  };
+})();
+
+const plAIr = (() => {
+  const computerMarker = () => {
+    if (player.getMarkerPlayer1() === 'X') {
+      return 'O';
+    } if (player.getMarkerPlayer1() === 'O') {
+      return 'X';
+    }
+    return 'error';
+  };
+
+  const allPossibleMoves = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const movesX = gamePlay.getMovesX();
+  const movesO = gamePlay.getMovesO();
+
+  const getMovesMade = () => {
+    const allMovesMade = movesX.concat(movesO);
+    return allMovesMade;
+  };
+
+  const getMovesRemained = () => {
+    const allMovesMade1 = new Set(getMovesMade());
+    const remainedMoves = allPossibleMoves.filter((x) => !allMovesMade1.has(x));
+    return remainedMoves;
+  };
+
+  const pickRandom = (array) => array[Math.floor(Math.random() * array.length)];
+
+  const checkPossibleWin = (moves) => {
+    let winningMove = '';
+    if (moves.length >= 2) {
+      if (moves.includes('1') && moves.includes('2')) { // possible win pattern1
+        winningMove = '3';
+      } else if (moves.includes('1') && moves.includes('3')) {
+        winningMove = '2';
+      } else if (moves.includes('2') && moves.includes('3')) {
+        winningMove = '1';
+      } else if (moves.includes('4') && moves.includes('5')) { // possible win pattern2
+        winningMove = '6';
+      } else if (moves.includes('4') && moves.includes('6')) {
+        winningMove = '5';
+      } else if (moves.includes('5') && moves.includes('6')) {
+        winningMove = '4';
+      } else if (moves.includes('8') && moves.includes('9')) { // possible win pattern3
+        winningMove = '7';
+      } else if (moves.includes('7') && moves.includes('9')) {
+        winningMove = '8';
+      } else if (moves.includes('7') && moves.includes('8')) {
+        winningMove = '9';
+      } else if (moves.includes('1') && moves.includes('4')) { // possible win pattern3
+        winningMove = '7';
+      } else if (moves.includes('1') && moves.includes('7')) {
+        winningMove = '4';
+      } else if (moves.includes('4') && moves.includes('7')) {
+        winningMove = '1';
+      } else if (moves.includes('2') && moves.includes('5')) { // possible win pattern5
+        winningMove = '8';
+      } else if (moves.includes('2') && moves.includes('8')) {
+        winningMove = '5';
+      } else if (moves.includes('5') && moves.includes('8')) {
+        winningMove = '2';
+      } else if (moves.includes('3') && moves.includes('6')) { // possible win pattern6
+        winningMove = '9';
+      } else if (moves.includes('3') && moves.includes('9')) {
+        winningMove = '6';
+      } else if (moves.includes('6') && moves.includes('9')) {
+        winningMove = '3';
+      } else if (moves.includes('1') && moves.includes('5')) { // possible win pattern7
+        winningMove = '9';
+      } else if (moves.includes('1') && moves.includes('9')) {
+        winningMove = '5';
+      } else if (moves.includes('5') && moves.includes('9')) {
+        winningMove = '1';
+      } else if (moves.includes('3') && moves.includes('5')) { // possible win pattern8
+        winningMove = '7';
+      } else if (moves.includes('3') && moves.includes('7')) {
+        winningMove = '5';
+      } else if (moves.includes('5') && moves.includes('7')) {
+        winningMove = '3';
+      }
+    }
+    return winningMove;
+  };
+
+  const makeMove = (id) => {
+    const squares = document.getElementById(id);
+    squares.innerHTML = `${computerMarker()}`;
+    if (computerMarker() === 'X') {
+      movesX.push(id);
+    } else if (computerMarker() === 'O') {
+      movesO.push(id);
+    }
+  };
+
+  const playCode = [];
+  const comPlaysHard = () => {
+    if (manipulateDom.getGameMode() === 'PvC') {
+      if (computerMarker() === 'X') {
+      // First three marks begining of one of two strategies.
+      // Rest of the marks will be placed to win or to block and if there is no possibility for two,
+      // As the last option they will be placed randomly.
+      // First Move
+
+        const corners = ['1', '3', '7', '9'];
+        if (movesO.length === 0) {
+          const firstMove = pickRandom(corners);
+          makeMove(firstMove);
+        }
+        if (movesO.length === 1) {
+        // Second Move
+          if (movesO[0] === '5') {
+          // Play Name Rush the Corners
+            playCode.push('111');
+            const remainedCorners = corners.filter((x) => x !== movesX[0]);
+            const secondMove = pickRandom(remainedCorners);
+            makeMove(secondMove);
+          } else {
+            const randomWayChoose = pickRandom(['1', '2']);
+            if (randomWayChoose === '1') {
+            // Play Name Rush the Corners
+              const remainedCorners = corners.filter((x) => x !== movesX[0] && x !== movesO[0]);
+              const secondMove = pickRandom(remainedCorners);
+              makeMove(secondMove);
+              playCode.push('111');
+            } else {
+            // Play Name Stay Compact
+              let secondMove = '';
+              if (movesX[0] === '1' && movesO[0] !== '2' && movesO[0] !== '4') {
+                secondMove = pickRandom(['2', '4']);
+              } else if ((movesX[0] === '1' && movesO[0] === '2') || (movesX[0] === '7' && movesO[0] === '8')) {
+                secondMove = '4';
+              } else if ((movesX[0] === '1' && movesO[0] === '4') || (movesX[0] === '3' && movesO[0] === '6')) {
+                secondMove = '2';
+              } else if (movesX[0] === '3' && movesO[0] !== '2' && movesO[0] !== '6') {
+                secondMove = pickRandom(['2', '6']);
+              } else if ((movesX[0] === '3' && movesO[0] === '2') || (movesX[0] === '9' && movesO[0] === '8')) {
+                secondMove = '6';
+              } else if (movesX[0] === '7' && movesO[0] !== '4' && movesO[0] !== '8') {
+                secondMove = pickRandom(['4', '8']);
+              } else if ((movesX[0] === '7' && movesO[0] === '4') || (movesX[0] === '9' && movesO[0] === '6')) {
+                secondMove = '8';
+              } else if (movesX[0] === '9' && movesO[0] !== '6' && movesO[0] !== '8') {
+                secondMove = pickRandom(['6', '8']);
+              }
+              makeMove(secondMove);
+              playCode.push('112');
+            }
+          }
+        }
+
+        if (movesO.length === 2) {
+          // third move check win and block moves if both empty, then make move suits strategy.
+          // if no suitable move, then mark randomly.
+          const xWinningMove = checkPossibleWin(movesX);
+          const oBlockingMove = checkPossibleWin(movesO);
+          if (xWinningMove !== '' && !getMovesMade().includes(xWinningMove)) {
+            makeMove(xWinningMove);
+            gamePlay.checkWin(computerMarker());
+          } else if (oBlockingMove !== '' && !getMovesMade().includes(oBlockingMove)) {
+            makeMove(oBlockingMove);
+          } else if (gamePlay.getWinningPattern() === null) {
+            if (playCode[playCode.length - 1] === '111') {
+              // eslint-disable-next-line max-len
+              const remainedCorners = corners.filter((x) => !movesX.includes(x) && !movesO.includes(x));
+              makeMove(pickRandom(remainedCorners));
+            } else if (playCode[playCode.length - 1] === '112' && !movesO.includes('5')) {
+              makeMove('5');
+            } else {
+              makeMove(pickRandom(getMovesRemained()));
+            }
+          }
+        }
+        if (movesO.length >= 3) {
+          // rest of the moves for check win and block options
+          const xWinningMove = checkPossibleWin(movesX);
+          const oBlockingMove = checkPossibleWin(movesO);
+          if (xWinningMove !== '' && !getMovesMade().includes(xWinningMove)) {
+            makeMove(xWinningMove);
+          } else if (oBlockingMove !== '' && !getMovesMade().includes(oBlockingMove)) {
+            makeMove(oBlockingMove);
+          } else if (gamePlay.getWinningPattern() === null) {
+            makeMove(pickRandom(getMovesRemained()));
+          }
+          gamePlay.checkWin(computerMarker());
+        }
+      }
+      if (computerMarker() === 'O') {
+        // second play will place here
+      }
+    }
+  };
+
+  return {
+    computerMarker,
+    comPlaysHard,
   };
 })();
