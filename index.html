@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="winner"></div>
-  <div class="game-board-container">
+  <div class="game-board-container">  
     <div class="squares" id="1"></div>
     <div class="squares" id="2"></div>
     <div class="squares" id="3"></div>
@@ -25,12 +25,13 @@
     <div class="squares" id="7"></div>
     <div class="squares" id="8"></div>
     <div class="squares" id="9"></div>
+    <canvas></canvas>
   </div>
 
   <div class="game-info-container">
     <div class="scene-choose-play">
       <button class="PvP">Player Vs Player</button>
-      <button class="PvC">Player vs Computer</button>
+      <button class="PvC" style="display: none;">Player vs Computer</button>
     </div>
     <div class="scene-select-name">
       <form action="" method="get" class="player-info">
@@ -81,6 +82,7 @@
       </div>
 
       <button class="restart-game">Restart Game</button>
+      <button class="change-players">New Game</button>
     </div>
     <div class="scene-end-round">
       <div class="header-info">SCORE</div>
@@ -97,7 +99,7 @@
 
       <button class="new-round">New Round</button>
       <button class="restart-game">Restart Game</button>
-      <button class="change-players">Change Players</button>
+      <button class="change-players">New Game</button>
     </div>
 
     
@@ -105,4 +107,6 @@
   
 
 </body>
+
+
 </html>
