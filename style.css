@@ -62,13 +62,26 @@ body{
 }
 
 .game-board-container{
+  position: relative;
   display: none;
   grid-template: repeat(3, minmax(2.5rem,1fr)) / repeat(3, minmax(2.5rem,1fr));
   gap:0.3rem;
-  height: clamp(16rem, calc(16rem+2vh), 35vh);
-  width:clamp(16rem, calc(16rem+2vh), 35vh);
+  height: clamp(14rem, calc(14rem+2vh), 35vh);
+  width:clamp(14rem, calc(14rem+2vh), 35vh);
   background-color: var(--text-color);
   flex: 0 0 auto;
+}
+
+.game-board-container canvas{
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 2rem;
+  height: 10rem;
+  width: 10rem;
+  color: var(--background-color-buttons);
+  overflow: hidden;
+  
 }
 
 
@@ -259,6 +272,7 @@ body{
   font-family: game-font;
   padding: 1rem 100%;
   min-width: max-content;
+  z-index: 2;
 }
 
 .winner span{
