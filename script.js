@@ -23,10 +23,10 @@ const manipulateDom = (() => {
   };
 
   const activateThirdSceneButtons = () => {
-    const restartGame = document.querySelector('.restart-game');
+    const restartGame = document.querySelector('.scene-during-game .restart-game');
     restartGame.addEventListener('click', gamePlay.restartGame);
 
-    const changePlayers = document.querySelector('.change-players');
+    const changePlayers = document.querySelector('.scene-during-game .change-players');
     changePlayers.addEventListener('click', gamePlay.newGame);
 
     const squares = document.querySelectorAll('.squares');
@@ -156,11 +156,11 @@ const player = (() => {
       player1.marker = player1Marker;
       player2.name = document.querySelector('#player2-name').value;
       player2.marker = player2Marker;
+      manipulateDom.turnGameBoardSceneOn();
       manipulateDom.callThirdScene();
       showNames();
       gamePlay.showScore();
       gamePlay.startRound();
-      manipulateDom.turnGameBoardSceneOn();
     }
   };
 
@@ -211,7 +211,6 @@ const gamePlay = (() => {
     startRound();
     emptyGameCache();
     showScore();
-    manipulateDom.callThirdScene();
   };
 
   const startRound = () => {
@@ -305,6 +304,91 @@ const gamePlay = (() => {
         showScore();
       }
       manipulateDom.callFourthScene();
+      showWinPattern();
+    }
+  };
+
+  const showWinPattern = () => {
+    const gameBoard = document.querySelector('.game-board-container');
+    const canvas = document.createElement('canvas');
+    gameBoard.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    switch (winningPattern) {
+      case '1':
+        ctx.moveTo(0, 2);
+        ctx.lineTo(300, 2);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#0B0C10';
+        ctx.stroke();
+
+        break;
+      case '2':
+        ctx.moveTo(0, 75);
+        ctx.lineTo(300, 75);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#0B0C10';
+        ctx.stroke();
+
+        break;
+      case '3':
+        ctx.moveTo(0, 147);
+        ctx.lineTo(300, 147);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#0B0C10';
+        ctx.stroke();
+
+        break;
+      case '4':
+        ctx.moveTo(3, 0);
+        ctx.lineTo(3, 300);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#0B0C10';
+        ctx.stroke();
+
+        break;
+      case '5':
+        ctx.moveTo(148, 0);
+        ctx.lineTo(148, 300);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#0B0C10';
+        ctx.stroke();
+
+        break;
+      case '6':
+        ctx.moveTo(297, 0);
+        ctx.lineTo(297, 300);
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#0B0C10';
+        ctx.stroke();
+
+        break;
+      case '7':
+        ctx.moveTo(0, 0);
+        ctx.lineTo(300, 150);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#0B0C10';
+        ctx.stroke();
+
+        break;
+      case '8':
+        ctx.moveTo(300, 0);
+        ctx.lineTo(0, 150);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#0B0C10';
+        ctx.stroke();
+
+        break;
+      default:
+    }
+  };
+
+  const removeCanvas = () => {
+    const div = document.querySelector('.game-board-container');
+    const lastElement = div.lastElementChild.tagName;
+    if (lastElement === 'CANVAS') {
+      const gameBoard = document.querySelector('.game-board-container');
+      const canvas = document.querySelector('canvas');
+      gameBoard.removeChild(canvas);
     }
   };
 
@@ -327,10 +411,10 @@ const gamePlay = (() => {
     movesO.length = 0;
     lastMove = 'O';
     winningPattern = null;
+    removeCanvas();
   };
 
   const emptyGameCache = () => {
-    emptyRoundCache();
     scorePlayer1 = 0;
     scorePlayer2 = 0;
   };
@@ -345,5 +429,3 @@ const gamePlay = (() => {
     newGame,
   };
 })();
-
-// Computer Plays
