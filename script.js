@@ -26,6 +26,9 @@ const manipulateDom = (() => {
     const restartGame = document.querySelector('.restart-game');
     restartGame.addEventListener('click', gamePlay.restartGame);
 
+    const changePlayers = document.querySelector('.change-players');
+    changePlayers.addEventListener('click', gamePlay.newGame);
+
     const squares = document.querySelectorAll('.squares');
     for (let i = 0; i < squares.length; i += 1) {
       squares[i].addEventListener('click', (e) => {
@@ -46,7 +49,7 @@ const manipulateDom = (() => {
     const newRound = document.querySelector('.new-round');
     newRound.addEventListener('click', gamePlay.startRound);
 
-    const changePlayers = document.querySelector('.change-players');
+    const changePlayers = document.querySelector('.scene-end-round .change-players');
     changePlayers.addEventListener('click', gamePlay.newGame);
   };
 
@@ -342,3 +345,5 @@ const gamePlay = (() => {
     newGame,
   };
 })();
+
+// Computer Plays
