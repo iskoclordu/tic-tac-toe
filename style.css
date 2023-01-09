@@ -102,8 +102,9 @@ body{
 }
 
 .scene-choose-play button{
-  width: 30vh;
+  min-width: max-content;
   height: 4rem;
+  padding: 0 2rem;
 }
 
 
