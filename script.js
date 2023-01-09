@@ -43,11 +43,14 @@ const manipulateDom = (() => {
   };
 
   const activateFourthSceneButtons = () => {
-    const restartGame = document.querySelector('.scene-end-round .restart-game');
-    restartGame.addEventListener('click', gamePlay.restartGame);
-
     const newRound = document.querySelector('.new-round');
     newRound.addEventListener('click', gamePlay.startRound);
+
+    const changeMarker = document.querySelector('.change-marker');
+    changeMarker.addEventListener('click', gamePlay.startRoundWithDifferentMarker);
+
+    const restartGame = document.querySelector('.scene-end-round .restart-game');
+    restartGame.addEventListener('click', gamePlay.restartGame);
 
     const changePlayers = document.querySelector('.scene-end-round .change-players');
     changePlayers.addEventListener('click', gamePlay.newGame);
@@ -187,12 +190,19 @@ const player = (() => {
     player2NameShowEndRound.innerHTML = `<span>${player2.name}</span>`;
   };
 
+  const changeMarker = () => {
+    const player1MarkerCache = player1.marker;
+    player1.marker = player2.marker;
+    player2.marker = player1MarkerCache;
+  };
+
   return {
     submitVal,
     getNamePlayer1,
     getNamePlayer2,
     getMarkerPlayer1,
     getMarkerPlayer2,
+    changeMarker,
 
   };
 })();
@@ -221,6 +231,11 @@ const gamePlay = (() => {
 
     emptyRoundCache();
     manipulateDom.callThirdScene();
+  };
+
+  const startRoundWithDifferentMarker = () => {
+    startRound();
+    player.changeMarker();
   };
 
   const defineCurrentMove = () => {
@@ -427,5 +442,6 @@ const gamePlay = (() => {
     restartGame,
     showScore,
     newGame,
+    startRoundWithDifferentMarker,
   };
 })();

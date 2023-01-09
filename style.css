@@ -254,6 +254,14 @@ body{
   text-align: center;
 }
 
+.scene-end-round .button-container{
+  display: grid;
+  grid-template: repeat(2,1fr)/repeat(2,1fr);
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .scene-end-round button{
   height: 2rem;
   font-size: 1.5rem;
