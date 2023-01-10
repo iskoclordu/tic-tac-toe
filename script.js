@@ -172,7 +172,7 @@ const player = (() => {
         player2.name = document.querySelector('#player2-name').value;
         player2.marker = player2Marker;
       } else if (manipulateDom.getGameMode() === 'PvC') {
-        player2.name = 'plAIr';
+        player2.name = 'PL-AI-R';
         player2.marker = plAIr.computerMarker();
       }
 
@@ -190,21 +190,21 @@ const player = (() => {
   const getMarkerPlayer2 = () => player2.marker;
 
   const showNames = () => {
-    const player1NameShow = document.querySelector('.player1-name-container');
+    const player1NameShow = document.querySelector('.scene-during-game .player1-name-container');
     player1NameShow.innerHTML = '';
     player1NameShow.innerHTML = `<span>${player1.name} - ${player1.marker}</span>`;
 
-    const player2NameShow = document.querySelector('.player2-name-container');
+    const player2NameShow = document.querySelector('.scene-during-game .player2-name-container');
     player2NameShow.innerHTML = '';
     player2NameShow.innerHTML = `<span>${player2.name} - ${player2.marker}</span>`;
 
     const player1NameShowEndRound = document.querySelector('.scene-end-round .player1-name-container');
     player1NameShowEndRound.innerHTML = '';
-    player1NameShowEndRound.innerHTML = `<span>${player1.name}</span>`;
+    player1NameShowEndRound.innerHTML = `<span>${player1.name} - ${player1.marker}</span>`;
 
     const player2NameShowEndRound = document.querySelector('.scene-end-round .player2-name-container');
     player2NameShowEndRound.innerHTML = '';
-    player2NameShowEndRound.innerHTML = `<span>${player2.name}</span>`;
+    player2NameShowEndRound.innerHTML = `<span>${player2.name} - ${player2.marker}</span>`;
   };
 
   const changeMarker = () => {
@@ -248,7 +248,7 @@ const gamePlay = (() => {
     emptyRoundCache();
     manipulateDom.callThirdScene();
 
-    if (manipulateDom.getGameMode() === 'PvC') {
+    if (manipulateDom.getGameMode() === 'PvC' && player.getMarkerPlayer1() !== 'X') {
       plAIr.comPlaysHard();
     }
   };
@@ -510,53 +510,53 @@ const plAIr = (() => {
   const checkPossibleWin = (moves) => {
     let winningMove = '';
     if (moves.length >= 2) {
-      if (moves.includes('1') && moves.includes('2')) { // possible win pattern1
+      if (moves.includes('1') && moves.includes('2') && getMovesRemained().includes('3')) { // possible win pattern1
         winningMove = '3';
-      } else if (moves.includes('1') && moves.includes('3')) {
+      } else if (moves.includes('1') && moves.includes('3') && getMovesRemained().includes('2')) {
         winningMove = '2';
-      } else if (moves.includes('2') && moves.includes('3')) {
+      } else if (moves.includes('2') && moves.includes('3') && getMovesRemained().includes('1')) {
         winningMove = '1';
-      } else if (moves.includes('4') && moves.includes('5')) { // possible win pattern2
+      } else if (moves.includes('4') && moves.includes('5') && getMovesRemained().includes('6')) { // possible win pattern2
         winningMove = '6';
-      } else if (moves.includes('4') && moves.includes('6')) {
+      } else if (moves.includes('4') && moves.includes('6') && getMovesRemained().includes('5')) {
         winningMove = '5';
-      } else if (moves.includes('5') && moves.includes('6')) {
+      } else if (moves.includes('5') && moves.includes('6') && getMovesRemained().includes('4')) {
         winningMove = '4';
-      } else if (moves.includes('8') && moves.includes('9')) { // possible win pattern3
+      } else if (moves.includes('8') && moves.includes('9') && getMovesRemained().includes('7')) { // possible win pattern3
         winningMove = '7';
-      } else if (moves.includes('7') && moves.includes('9')) {
+      } else if (moves.includes('7') && moves.includes('9') && getMovesRemained().includes('8')) {
         winningMove = '8';
-      } else if (moves.includes('7') && moves.includes('8')) {
+      } else if (moves.includes('7') && moves.includes('8') && getMovesRemained().includes('9')) {
         winningMove = '9';
-      } else if (moves.includes('1') && moves.includes('4')) { // possible win pattern3
+      } else if (moves.includes('1') && moves.includes('4') && getMovesRemained().includes('7')) { // possible win pattern3
         winningMove = '7';
-      } else if (moves.includes('1') && moves.includes('7')) {
+      } else if (moves.includes('1') && moves.includes('7') && getMovesRemained().includes('4')) {
         winningMove = '4';
-      } else if (moves.includes('4') && moves.includes('7')) {
+      } else if (moves.includes('4') && moves.includes('7') && getMovesRemained().includes('1')) {
         winningMove = '1';
-      } else if (moves.includes('2') && moves.includes('5')) { // possible win pattern5
+      } else if (moves.includes('2') && moves.includes('5') && getMovesRemained().includes('8')) { // possible win pattern5
         winningMove = '8';
-      } else if (moves.includes('2') && moves.includes('8')) {
+      } else if (moves.includes('2') && moves.includes('8') && getMovesRemained().includes('5')) {
         winningMove = '5';
-      } else if (moves.includes('5') && moves.includes('8')) {
+      } else if (moves.includes('5') && moves.includes('8') && getMovesRemained().includes('2')) {
         winningMove = '2';
-      } else if (moves.includes('3') && moves.includes('6')) { // possible win pattern6
+      } else if (moves.includes('3') && moves.includes('6') && getMovesRemained().includes('9')) { // possible win pattern6
         winningMove = '9';
-      } else if (moves.includes('3') && moves.includes('9')) {
+      } else if (moves.includes('3') && moves.includes('9') && getMovesRemained().includes('6')) {
         winningMove = '6';
-      } else if (moves.includes('6') && moves.includes('9')) {
+      } else if (moves.includes('6') && moves.includes('9') && getMovesRemained().includes('3')) {
         winningMove = '3';
-      } else if (moves.includes('1') && moves.includes('5')) { // possible win pattern7
+      } else if (moves.includes('1') && moves.includes('5') && getMovesRemained().includes('9')) { // possible win pattern7
         winningMove = '9';
-      } else if (moves.includes('1') && moves.includes('9')) {
+      } else if (moves.includes('1') && moves.includes('9') && getMovesRemained().includes('5')) {
         winningMove = '5';
-      } else if (moves.includes('5') && moves.includes('9')) {
+      } else if (moves.includes('5') && moves.includes('9') && getMovesRemained().includes('1')) {
         winningMove = '1';
-      } else if (moves.includes('3') && moves.includes('5')) { // possible win pattern8
+      } else if (moves.includes('3') && moves.includes('5') && getMovesRemained().includes('7')) { // possible win pattern8
         winningMove = '7';
-      } else if (moves.includes('3') && moves.includes('7')) {
+      } else if (moves.includes('3') && moves.includes('7') && getMovesRemained().includes('5')) {
         winningMove = '5';
-      } else if (moves.includes('5') && moves.includes('7')) {
+      } else if (moves.includes('5') && moves.includes('7') && getMovesRemained().includes('3')) {
         winningMove = '3';
       }
     }
@@ -576,13 +576,13 @@ const plAIr = (() => {
   const playCode = [];
   const comPlaysHard = () => {
     if (manipulateDom.getGameMode() === 'PvC') {
+      const corners = ['1', '3', '7', '9'];
       if (computerMarker() === 'X') {
       // First three marks begining of one of two strategies.
       // Rest of the marks will be placed to win or to block and if there is no possibility for two,
       // As the last option they will be placed randomly.
       // First Move
 
-        const corners = ['1', '3', '7', '9'];
         if (movesO.length === 0) {
           const firstMove = pickRandom(corners);
           makeMove(firstMove);
@@ -652,6 +652,7 @@ const plAIr = (() => {
           }
         }
         if (movesO.length >= 3) {
+          playCode.length = 0;
           // rest of the moves for check win and block options
           const xWinningMove = checkPossibleWin(movesX);
           const oBlockingMove = checkPossibleWin(movesO);
@@ -666,7 +667,104 @@ const plAIr = (() => {
         }
       }
       if (computerMarker() === 'O') {
-        // second play will place here
+        if (movesX.length === 1) {
+          // first Move
+          if (corners.includes(movesX[0])) {
+            const firstMove = '5';
+            makeMove(firstMove);
+          } else {
+            const firstMove = pickRandom(corners);
+            makeMove(firstMove);
+          }
+        } else if (movesX.length === 2) { // second Move
+          if (movesO[0] === '5') {
+            const xBlockingMove = checkPossibleWin(movesX);
+            if (xBlockingMove !== '' && getMovesRemained().includes(xBlockingMove)) {
+              makeMove(xBlockingMove);
+            } else if (getMovesRemained().includes('2') && getMovesRemained().includes('8')) {
+              const secondMove = pickRandom(['2', '8']);
+              makeMove(secondMove);
+            } else if (getMovesRemained().includes('1') && getMovesRemained().includes('9')) {
+              const secondMove = pickRandom(['1', '9']);
+              makeMove(secondMove);
+            } else if (getMovesRemained().includes('4') && getMovesRemained().includes('6')) {
+              const secondMove = pickRandom(['4', '6']);
+              makeMove(secondMove);
+            } else if (getMovesRemained().includes('3') && getMovesRemained().includes('7')) {
+              const secondMove = pickRandom(['3', '7']);
+              makeMove(secondMove);
+            }
+          } else if (movesO[0] !== '5') {
+            const xBlockingMove = checkPossibleWin(movesX);
+            if (xBlockingMove !== '' && getMovesRemained().includes(xBlockingMove)) {
+              makeMove(xBlockingMove);
+            } else if (movesO[0] === '1' && (movesX.includes('2') || movesX.includes('3')) && (movesX.includes('4') || movesX.includes('7'))) {
+              const secondMove = '5';
+              makeMove(secondMove);
+            } else if (movesO[0] === '1' && (!movesX.includes('2') && !movesX.includes('3')) && (!movesX.includes('4') && !movesX.includes('7'))) {
+              const secondMove = pickRandom(['3', '7']);
+              makeMove(secondMove);
+            } else if (movesO[0] === '1' && (!movesX.includes('2') && !movesX.includes('3'))) {
+              const secondMove = '3';
+              makeMove(secondMove);
+            } else if (movesO[0] === '1' && (!movesX.includes('4') && !movesX.includes('7'))) {
+              const secondMove = '7';
+              makeMove(secondMove);
+            } else if (movesO[0] === '3' && (movesX.includes('1') || movesX.includes('2')) && (movesX.includes('6') || movesX.includes('9'))) {
+              const secondMove = '5';
+              makeMove(secondMove);
+            } else if (movesO[0] === '3' && (!movesX.includes('1') && !movesX.includes('2')) && (!movesX.includes('6') && !movesX.includes('9'))) {
+              const secondMove = pickRandom(['1', '9']);
+              makeMove(secondMove);
+            } else if (movesO[0] === '3' && (!movesX.includes('1') && !movesX.includes('2'))) {
+              const secondMove = '1';
+              makeMove(secondMove);
+            } else if (movesO[0] === '3' && (!movesX.includes('6') && !movesX.includes('9'))) {
+              const secondMove = '9';
+              makeMove(secondMove);
+            } else if (movesO[0] === '7' && (movesX.includes('1') || movesX.includes('4')) && (movesX.includes('8') || movesX.includes('9'))) {
+              const secondMove = '5';
+              makeMove(secondMove);
+            } else if (movesO[0] === '7' && (!movesX.includes('1') && !movesX.includes('4')) && (movesX.includes('8') && movesX.includes('9'))) {
+              const secondMove = pickRandom(['1', '9']);
+              makeMove(secondMove);
+            } else if (movesO[0] === '7' && (!movesX.includes('1') && !movesX.includes('4'))) {
+              const secondMove = '1';
+              makeMove(secondMove);
+            } else if (movesO[0] === '7' && (!movesX.includes('8') && !movesX.includes('9'))) {
+              const secondMove = '9';
+              makeMove(secondMove);
+            } else if (movesO[0] === '9' && (movesX.includes('3') || movesX.includes('6')) && (movesX.includes('7') || movesX.includes('8'))) {
+              const secondMove = '5';
+              makeMove(secondMove);
+            } else if (movesO[0] === '9' && (!movesX.includes('3') && !movesX.includes('6')) && (!movesX.includes('7') && !movesX.includes('8'))) {
+              const secondMove = pickRandom(['3', '7']);
+              makeMove(secondMove);
+            } else if (movesO[0] === '9' && (!movesX.includes('3') && !movesX.includes('6'))) {
+              const secondMove = '3';
+              makeMove(secondMove);
+            } else if (movesO[0] === '9' && (!movesX.includes('7') && !movesX.includes('8'))) {
+              const secondMove = '7';
+              makeMove(secondMove);
+            }
+          }
+          gamePlay.checkWin(computerMarker());
+        } else if (movesX.length >= 3 && movesX.length < 5) { // third Move
+          const oWinningMove = checkPossibleWin(movesO);
+          console.log(movesO);
+          console.log(checkPossibleWin(movesO));
+          const xBlockingMove = checkPossibleWin(movesX);
+          console.log(movesX);
+          console.log(checkPossibleWin(movesX));
+          if (oWinningMove !== '' && getMovesRemained().includes(oWinningMove)) {
+            makeMove(oWinningMove);
+          } else if (xBlockingMove !== '' && getMovesRemained().includes(xBlockingMove)) {
+            makeMove(xBlockingMove);
+          } else {
+            makeMove(pickRandom(getMovesRemained()));
+          }
+          gamePlay.checkWin(computerMarker());
+        }
       }
     }
   };
