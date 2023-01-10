@@ -751,11 +751,7 @@ const plAIr = (() => {
           gamePlay.checkWin(computerMarker());
         } else if (movesX.length >= 3 && movesX.length < 5) { // third Move
           const oWinningMove = checkPossibleWin(movesO);
-          console.log(movesO);
-          console.log(checkPossibleWin(movesO));
           const xBlockingMove = checkPossibleWin(movesX);
-          console.log(movesX);
-          console.log(checkPossibleWin(movesX));
           if (oWinningMove !== '' && getMovesRemained().includes(oWinningMove)) {
             makeMove(oWinningMove);
           } else if (xBlockingMove !== '' && getMovesRemained().includes(xBlockingMove)) {
