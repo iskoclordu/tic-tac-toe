@@ -607,21 +607,29 @@ const plAIr = (() => {
             // Play Name Stay Compact
               let secondMove = '';
               if (movesX[0] === '1' && movesO[0] !== '2' && movesO[0] !== '4') {
-                secondMove = pickRandom(['2', '4']);
+                if (movesO[0] === '9') {
+                  secondMove = '5';
+                } else { secondMove = pickRandom(['2', '4']); }
               } else if ((movesX[0] === '1' && movesO[0] === '2') || (movesX[0] === '7' && movesO[0] === '8')) {
                 secondMove = '4';
               } else if ((movesX[0] === '1' && movesO[0] === '4') || (movesX[0] === '3' && movesO[0] === '6')) {
                 secondMove = '2';
               } else if (movesX[0] === '3' && movesO[0] !== '2' && movesO[0] !== '6') {
-                secondMove = pickRandom(['2', '6']);
+                if (movesO[0] === '7') {
+                  secondMove = '5';
+                } else { secondMove = pickRandom(['2', '6']); }
               } else if ((movesX[0] === '3' && movesO[0] === '2') || (movesX[0] === '9' && movesO[0] === '8')) {
                 secondMove = '6';
               } else if (movesX[0] === '7' && movesO[0] !== '4' && movesO[0] !== '8') {
-                secondMove = pickRandom(['4', '8']);
+                if (movesO[0] === '3') {
+                  secondMove = '5';
+                } else { secondMove = pickRandom(['4', '8']); }
               } else if ((movesX[0] === '7' && movesO[0] === '4') || (movesX[0] === '9' && movesO[0] === '6')) {
                 secondMove = '8';
               } else if (movesX[0] === '9' && movesO[0] !== '6' && movesO[0] !== '8') {
-                secondMove = pickRandom(['6', '8']);
+                if (movesO[0] === '1') {
+                  secondMove = '5';
+                } else { secondMove = pickRandom(['6', '8']); }
               }
               makeMove(secondMove);
               playCode.push('112');
@@ -644,8 +652,26 @@ const plAIr = (() => {
               // eslint-disable-next-line max-len
               const remainedCorners = corners.filter((x) => !movesX.includes(x) && !movesO.includes(x));
               makeMove(pickRandom(remainedCorners));
-            } else if (playCode[playCode.length - 1] === '112' && !movesO.includes('5')) {
-              makeMove('5');
+            } else if (playCode[playCode.length - 1] === '112') {
+              if (getMovesRemained().includes('5')) {
+                makeMove('5');
+              } else if (movesX.includes('1') && getMovesRemained().includes('4')) {
+                makeMove('4');
+              } else if (movesX.includes('1') && getMovesRemained().includes('2')) {
+                makeMove('2');
+              } else if (movesX.includes('3') && getMovesRemained().includes('6')) {
+                makeMove('6');
+              } else if (movesX.includes('3') && getMovesRemained().includes('2')) {
+                makeMove('2');
+              } else if (movesX.includes('7') && getMovesRemained().includes('4')) {
+                makeMove('4');
+              } else if (movesX.includes('7') && getMovesRemained().includes('8')) {
+                makeMove('8');
+              } else if (movesX.includes('9') && getMovesRemained().includes('8')) {
+                makeMove('8');
+              } else if (movesX.includes('9') && getMovesRemained().includes('6')) {
+                makeMove('6');
+              }
             } else {
               makeMove(pickRandom(getMovesRemained()));
             }
